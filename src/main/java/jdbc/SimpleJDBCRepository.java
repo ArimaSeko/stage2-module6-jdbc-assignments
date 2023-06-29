@@ -54,7 +54,7 @@ public class SimpleJDBCRepository {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
             ResultSet rs = st.executeQuery(findUserByIdSQL+userId);
-            while(rs.next()){
+            while(rs.next()) {
             user.setId(rs.getLong("id"));
             user.setFirstName(rs.getString("firstName"));
             user.setLastName(rs.getString("firstName"));
@@ -75,11 +75,11 @@ public class SimpleJDBCRepository {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
             ResultSet rs = st.executeQuery(findUserByNameSQL+"'%"+userName+"%'");
-            while(rs.next()){
-                user.setId(rs.getLong("id"));
-                user.setFirstName(rs.getString("firstName"));
-                user.setLastName(rs.getString("firstName"));
-                user.setAge(rs.getInt("age"));
+            while (rs.next()) {
+            user.setId(rs.getLong("id"));
+            user.setFirstName(rs.getString("firstName"));
+            user.setLastName(rs.getString("firstName"));
+            user.setAge(rs.getInt("age"));
             }
             rs.close();
             st.close();
@@ -114,7 +114,7 @@ public class SimpleJDBCRepository {
     }
 
     public User updateUser(User user) {
-        long id=0;
+
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
@@ -122,7 +122,11 @@ public class SimpleJDBCRepository {
             +"lastName='"+user.getLastName()+"', age ="+user.getAge()+" where id ="+user.getId());
             ResultSet rs = st.executeQuery("SELECT * FROM USERS ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
-                id =rs.getLong("id");
+                 user = new User();
+                user.setId(rs.getLong("id"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("firstName"));
+                user.setAge(rs.getInt("age"));
             }
             rs.close();
             st.close();
@@ -133,7 +137,7 @@ public class SimpleJDBCRepository {
         return user;
     }
 
-    private void deleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
