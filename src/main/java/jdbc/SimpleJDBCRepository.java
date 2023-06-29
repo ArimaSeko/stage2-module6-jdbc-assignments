@@ -21,7 +21,7 @@ public class SimpleJDBCRepository {
     private Statement st = null;
 
     private static final String createUsersQL = "insert into public.myusers(firstName, lastName,age) values";
-    private static final String updateUsersQL = "update public.myusers set";
+    private static final String updateUsersQL = "update public.myusers set ";
     private static final String deleteUsersQL = "delete from public.myusers where id =";
     private static final String findUserByIdSQL = "select * from public.myusers where id =";
     private static final String findUserByNameSQL = "select * from public.myusers where firstName like ";
@@ -118,7 +118,7 @@ public class SimpleJDBCRepository {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            st.executeUpdate(updateUsersQL + "first_name='"+user.getFirstName()+"',"
+            st.executeUpdate(updateUsersQL + " first_name='"+user.getFirstName()+"',"
             +"lastName='"+user.getLastName()+"', age ="+user.getAge()+" where id ="+user.getId());
             ResultSet rs = st.executeQuery("SELECT * FROM public.myusers ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
