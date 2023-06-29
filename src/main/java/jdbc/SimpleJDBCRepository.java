@@ -20,12 +20,12 @@ public class SimpleJDBCRepository {
     private PreparedStatement ps = null;
     private Statement st = null;
 
-    private static final String createUserSQL = "insert into users(firstName, lastName,age) values";
-    private static final String updateUserSQL = "update Users set";
-    private static final String deleteUserSQL = "delete from Users where id =";
+    private static final String createUsersQL = "insert into Users(firstName, lastName,age) values";
+    private static final String updateUsersQL = "update Users set";
+    private static final String deleteUsersQL = "delete from Users where id =";
     private static final String findUserByIdSQL = "select * from Users where id =";
     private static final String findUserByNameSQL = "select * from Users where name like ";
-    private static final String findAllUserSQL = "select * from users";
+    private static final String findAllUsersQL = "select * from Users";
 
     public Long createUser(User user) {
 
@@ -33,9 +33,9 @@ public class SimpleJDBCRepository {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            st.executeUpdate(createUserSQL+"('"+user.getFirstName()+"',"
+            st.executeUpdate(createUsersQL+"('"+user.getFirstName()+"',"
                     +"'"+user.getLastName()+"',"+user.getAge()+")");
-            ResultSet rs = st.executeQuery("SELECT * FROM USERS ORDER BY ID DESC LIMIT 1");
+            ResultSet rs = st.executeQuery("SELECT * FROM Users ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
                 id =rs.getLong("id");
             }
@@ -91,18 +91,18 @@ public class SimpleJDBCRepository {
     }
 
     public List<User> findAllUser() {
-        List <User> users = new ArrayList<>();
+        List <User> Users = new ArrayList<>();
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            ResultSet rs = st.executeQuery(findAllUserSQL);
+            ResultSet rs = st.executeQuery(findAllUsersQL);
             while(rs.next()){
                 User user = new User();
                 user.setId(rs.getLong("id"));
                 user.setFirstName(rs.getString("firstName"));
                 user.setLastName(rs.getString("firstName"));
                 user.setAge(rs.getInt("age"));
-                users.add(user);
+                Users.add(user);
             }
             rs.close();
             st.close();
@@ -110,7 +110,7 @@ public class SimpleJDBCRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return users;
+        return Users;
     }
 
     public User updateUser(User user) {
@@ -118,9 +118,9 @@ public class SimpleJDBCRepository {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            st.executeUpdate(updateUserSQL + "firstName='"+user.getFirstName()+"',"
+            st.executeUpdate(updateUsersQL + "firstName='"+user.getFirstName()+"',"
             +"lastName='"+user.getLastName()+"', age ="+user.getAge()+" where id ="+user.getId());
-            ResultSet rs = st.executeQuery("SELECT * FROM USERS ORDER BY ID DESC LIMIT 1");
+            ResultSet rs = st.executeQuery("SELECT * FROM Users ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
                  user = new User();
                 user.setId(rs.getLong("id"));
@@ -141,7 +141,7 @@ public class SimpleJDBCRepository {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            st.executeUpdate(deleteUserSQL+userId);
+            st.executeUpdate(deleteUsersQL+userId);
             st.close();
             connection.close();
         } catch (SQLException e) {
