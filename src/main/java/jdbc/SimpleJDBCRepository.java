@@ -118,7 +118,7 @@ public class SimpleJDBCRepository {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            st.executeUpdate(updateUsersQL + " first_name='"+user.getFirstName()+"',"
+            st.executeUpdate(updateUsersQL + " firstName='"+user.getFirstName()+"',"
             +"lastName='"+user.getLastName()+"', age ="+user.getAge()+" where id ="+user.getId());
             ResultSet rs = st.executeQuery("SELECT * FROM public.myusers ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
