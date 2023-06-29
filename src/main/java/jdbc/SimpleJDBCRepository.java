@@ -20,12 +20,12 @@ public class SimpleJDBCRepository {
     private PreparedStatement ps = null;
     private Statement st = null;
 
-    private static final String createUsersQL = "insert into Users(firstName, lastName,age) values";
-    private static final String updateUsersQL = "update Users set";
-    private static final String deleteUsersQL = "delete from Users where id =";
-    private static final String findUserByIdSQL = "select * from Users where id =";
-    private static final String findUserByNameSQL = "select * from Users where name like ";
-    private static final String findAllUsersQL = "select * from Users";
+    private static final String createUsersQL = "insert into public.users(firstName, lastName,age) values";
+    private static final String updateUsersQL = "update public.users set";
+    private static final String deleteUsersQL = "delete from public.users where id =";
+    private static final String findUserByIdSQL = "select * from public.users where id =";
+    private static final String findUserByNameSQL = "select * from public.users where name like ";
+    private static final String findAllUsersQL = "select * from public.users";
 
     public Long createUser(User user) {
 
@@ -35,7 +35,7 @@ public class SimpleJDBCRepository {
             st = connection.createStatement();
             st.executeUpdate(createUsersQL+"('"+user.getFirstName()+"',"
                     +"'"+user.getLastName()+"',"+user.getAge()+")");
-            ResultSet rs = st.executeQuery("SELECT * FROM Users ORDER BY ID DESC LIMIT 1");
+            ResultSet rs = st.executeQuery("SELECT * FROM public.users ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
                 id =rs.getLong("id");
             }
@@ -120,7 +120,7 @@ public class SimpleJDBCRepository {
             st = connection.createStatement();
             st.executeUpdate(updateUsersQL + "firstName='"+user.getFirstName()+"',"
             +"lastName='"+user.getLastName()+"', age ="+user.getAge()+" where id ="+user.getId());
-            ResultSet rs = st.executeQuery("SELECT * FROM Users ORDER BY ID DESC LIMIT 1");
+            ResultSet rs = st.executeQuery("SELECT * FROM public.users ORDER BY ID DESC LIMIT 1");
             while(rs.next()){
                  user = new User();
                 user.setId(rs.getLong("id"));
