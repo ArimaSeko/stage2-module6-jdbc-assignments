@@ -4,7 +4,6 @@ import javax.sql.DataSource;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.postgresql.util.LogWriterHandler;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -21,6 +20,7 @@ public class CustomDataSource implements DataSource {
     private final String url;
     private final String name;
     private final String password;
+    private static final SQLException SQL_EXCEPTION = new SQLException();
 
     private CustomDataSource(String driver, String url, String password, String name) {
         this.driver = driver;
@@ -48,38 +48,36 @@ public class CustomDataSource implements DataSource {
 
     @Override
     public PrintWriter getLogWriter() throws SQLException {
-        PrintWriter printWriter = DriverManager.getLogWriter();
-        return printWriter;
+        throw SQL_EXCEPTION;
     }
 
     @Override
     public void setLogWriter(PrintWriter out) throws SQLException {
-    DriverManager.setLogWriter(out);
+        throw SQL_EXCEPTION;
     }
 
     @Override
     public void setLoginTimeout(int seconds) throws SQLException {
-    DriverManager.setLoginTimeout(seconds);
+        throw SQL_EXCEPTION;
     }
 
     @Override
     public int getLoginTimeout() throws SQLException {
-        return  DriverManager.getLoginTimeout();
+        throw SQL_EXCEPTION;
     }
 
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-
-        return null;
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
+        throw SQL_EXCEPTION;
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
+        throw SQL_EXCEPTION;
     }
 }

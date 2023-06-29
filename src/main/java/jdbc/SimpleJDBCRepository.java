@@ -22,7 +22,7 @@ public class SimpleJDBCRepository {
 
     private static final String createUserSQL = "insert into users(firstName, lastName,age) values";
     private static final String updateUserSQL = "update Users set";
-    private static final String deleteUser = "delete from Users where id =";
+    private static final String deleteUserSQL = "delete from Users where id =";
     private static final String findUserByIdSQL = "select * from Users where id =";
     private static final String findUserByNameSQL = "select * from Users where name like ";
     private static final String findAllUserSQL = "select * from users";
@@ -122,7 +122,7 @@ public class SimpleJDBCRepository {
         try {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
-            st.executeUpdate(deleteUser+userId);
+            st.executeUpdate(deleteUserSQL+userId);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
