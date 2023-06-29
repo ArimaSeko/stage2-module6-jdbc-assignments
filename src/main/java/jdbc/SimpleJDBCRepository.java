@@ -128,4 +128,14 @@ public class SimpleJDBCRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public static void main(String[] args) {
+
+        User user = new User();
+        user.setFirstName("Karim");
+        user.setLastName("Abdr");
+        user.setAge(20);
+        SimpleJDBCRepository repository = new SimpleJDBCRepository();
+        repository.createUser(user);
+    }
 }
