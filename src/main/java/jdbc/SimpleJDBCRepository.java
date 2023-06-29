@@ -6,9 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,28 +20,112 @@ public class SimpleJDBCRepository {
     private PreparedStatement ps = null;
     private Statement st = null;
 
-    private static final String createUserSQL = "";
-    private static final String updateUserSQL = "";
-    private static final String deleteUser = "";
-    private static final String findUserByIdSQL = "";
-    private static final String findUserByNameSQL = "";
-    private static final String findAllUserSQL = "";
+    private static final String createUserSQL = "insert into users(firstName, lastName,age) values";
+    private static final String updateUserSQL = "update Users set";
+    private static final String deleteUser = "delete from Users where id =";
+    private static final String findUserByIdSQL = "select * from Users where id =";
+    private static final String findUserByNameSQL = "select * from Users where name like ";
+    private static final String findAllUserSQL = "select * from users";
 
-    public Long createUser() {
+    public Long createUser(User user) {
+
+        long id=0;
+        try {
+            connection = CustomDataSource.getInstance().getConnection();
+            st = connection.createStatement();
+            st.executeUpdate(createUserSQL+"('"+user.getFirstName()+"',"
+                    +"'"+user.getLastName()+"',"+user.getAge()+")");
+            ResultSet rs = st.executeQuery("SELECT * FROM USERS ORDER BY ID DESC LIMIT 1");
+            while(rs.next()){
+                id =rs.getLong("id");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return id;
     }
 
     public User findUserById(Long userId) {
+        User user = new User();
+        try {
+            connection = CustomDataSource.getInstance().getConnection();
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(findUserByIdSQL+userId);
+            while(rs.next()){
+            user.setId(rs.getLong("id"));
+            user.setFirstName(rs.getString("firstName"));
+            user.setLastName(rs.getString("firstName"));
+            user.setAge(rs.getInt("age"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 
     public User findUserByName(String userName) {
+        User user = new User();
+        try {
+            connection = CustomDataSource.getInstance().getConnection();
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(findUserByNameSQL+"'%"+userName+"%'");
+            while(rs.next()){
+                user.setId(rs.getLong("id"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("firstName"));
+                user.setAge(rs.getInt("age"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 
     public List<User> findAllUser() {
+        List <User> users = new ArrayList<>();
+        try {
+            connection = CustomDataSource.getInstance().getConnection();
+            st = connection.createStatement();
+            ResultSet rs = st.executeQuery(findAllUserSQL);
+            while(rs.next()){
+                User user = new User();
+                user.setId(rs.getLong("id"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("firstName"));
+                user.setAge(rs.getInt("age"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
     }
 
-    public User updateUser() {
+    public User updateUser(User user) {
+        long id=0;
+        try {
+            connection = CustomDataSource.getInstance().getConnection();
+            st = connection.createStatement();
+            st.executeUpdate(updateUserSQL + "firstName='"+user.getFirstName()+"',"
+            +"lastName='"+user.getLastName()+"', age ="+user.getAge()+" where id ="+user.getId());
+            ResultSet rs = st.executeQuery("SELECT * FROM USERS ORDER BY ID DESC LIMIT 1");
+            while(rs.next()){
+                id =rs.getLong("id");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 
     private void deleteUser(Long userId) {
+        try {
+            connection = CustomDataSource.getInstance().getConnection();
+            st = connection.createStatement();
+            st.executeUpdate(deleteUser+userId);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
