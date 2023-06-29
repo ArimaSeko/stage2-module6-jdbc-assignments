@@ -39,6 +39,9 @@ public class SimpleJDBCRepository {
             while(rs.next()){
                 id =rs.getLong("id");
             }
+            rs.close();
+            st.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +60,9 @@ public class SimpleJDBCRepository {
             user.setLastName(rs.getString("firstName"));
             user.setAge(rs.getInt("age"));
             }
+            rs.close();
+            st.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -75,6 +81,9 @@ public class SimpleJDBCRepository {
                 user.setLastName(rs.getString("firstName"));
                 user.setAge(rs.getInt("age"));
             }
+            rs.close();
+            st.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -95,6 +104,9 @@ public class SimpleJDBCRepository {
                 user.setAge(rs.getInt("age"));
                 users.add(user);
             }
+            rs.close();
+            st.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -112,6 +124,9 @@ public class SimpleJDBCRepository {
             while(rs.next()){
                 id =rs.getLong("id");
             }
+            rs.close();
+            st.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -123,7 +138,8 @@ public class SimpleJDBCRepository {
             connection = CustomDataSource.getInstance().getConnection();
             st = connection.createStatement();
             st.executeUpdate(deleteUserSQL+userId);
-
+            st.close();
+            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
